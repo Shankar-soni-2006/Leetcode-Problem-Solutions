@@ -9,7 +9,6 @@ class Solution {
             s[j] = temp;
             i++;
             j--;
-        }
-        
+        }    
     }
 }

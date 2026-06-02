@@ -12,8 +12,8 @@ class Solution {
         for(int i = 0; i < Wn; i++) minTime = Math.min(minTime,(Math.max(lmin,wST[i])+wD[i]));
 
         for(int i = 0; i < ln; i++) minTime = Math.min(minTime,(Math.max(wMin,lST[i])+lD[i]));
-        
-        System.out.print(lmin+" "+wMin+" "+minTime);
+
+        // System.out.print(lmin+" "+wMin+" "+minTime);
         return minTime;
     }
 }

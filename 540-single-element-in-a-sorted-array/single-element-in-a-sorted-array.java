@@ -10,6 +10,6 @@ class Solution {
             if(arr[mid] == arr[mid+1]) low = mid+2;
             else high = mid;    
         }
-        return arr[high];
+        return arr[low];
     }
 }

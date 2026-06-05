@@ -1,52 +1,99 @@
 class Solution {
+
+    private String s;
+    private int n;
+    private long[][][] memo_cnt;
+    private long[][][] memo_sum;
+
     public long totalWaviness(long num1, long num2) {
         return solve(num2) - solve(num1 - 1);
     }
 
-    private long solve(long n) {
-        if (n < 100) return 0;
-        String s = String.valueOf(n);
-        int len = s.length();
-        Long[][][][][][] memo = new Long[len][11][11][2][2][2];
-        return count(s, 0, 10, 10, 0, 0, 1, memo);
-    }
-
-    private long count(String s, int idx, int prev, int pprev, int isLess, int started, int tight, Long[][][][][][] memo) {
-        if (idx == s.length()) return 0;
-        if (memo[idx][prev][pprev][isLess][started][tight] != null) 
-            return memo[idx][prev][pprev][isLess][started][tight];
-
-        long ans = 0;
-        int limit = tight == 1 ? s.charAt(idx) - '0' : 9;
-
-        for (int d = 0; d <= limit; d++) {
-            int nextTight = (tight == 1 && d == limit) ? 1 : 0;
-            int nextStarted = (started == 1 || d > 0) ? 1 : 0;
-            
-            int waviness = 0;
-            if (started == 1 && pprev != 10) {
-                if (prev > pprev && prev > d) waviness = 1;
-                else if (prev < pprev && prev < d) waviness = 1;
-            }
-
-            if (waviness == 1) {
-                ans += countNumbers(s, idx + 1, nextTight);
-            }
-            
-            ans += count(s, idx + 1, d, (started == 1 ? prev : 10), isLess, nextStarted, nextTight, memo);
-        }
-        return memo[idx][prev][pprev][isLess][started][tight] = ans;
-    }
-
-    private long countNumbers(String s, int idx, int tight) {
-        if (idx == s.length()) return 1;
-        if (tight == 0) return (long) Math.pow(10, s.length() - idx);
+    
+    private long solve(long num) {
         
-        long count = 0;
-        int limit = s.charAt(idx) - '0';
-        for (int d = 0; d <= limit; d++) {
-            count += countNumbers(s, idx + 1, (d == limit ? 1 : 0));
+        if (num < 100) {
+            return 0L;
         }
-        return count;
+        s = Long.toString(num);
+        n = s.length();
+
+        
+        memo_cnt = new long[16][10][10];
+        
+        memo_sum = new long[16][10][10];
+        for (int i = 0; i < 16; i++) {
+            for (int j = 0; j < 10; j++) {
+                Arrays.fill(memo_cnt[i][j], -1);
+                Arrays.fill(memo_sum[i][j], -1);
+            }
+        }
+
+        long[] result = dfs(0, -1, -1, true, true);
+        return result[1];
+    }
+
+    private long[] dfs(
+        int pos,
+        int prev,
+        int curr,
+        boolean isLimit,
+        boolean isLeading
+    ) {
+        
+        if (pos == n) {
+            return new long[] { 1L, 0L };
+        }
+        
+        if (!isLimit && !isLeading && prev >= 0 && curr >= 0) {
+            if (memo_cnt[pos][prev][curr] != -1) {
+                return new long[] {
+                    memo_cnt[pos][prev][curr],
+                    memo_sum[pos][prev][curr],
+                };
+            }
+        }
+
+        
+        long cnt = 0;
+        long sum = 0;
+        int up = isLimit ? (s.charAt(pos) - '0') : 9;
+        for (int digit = 0; digit <= up; ++digit) {
+            boolean newLeading = isLeading && (digit == 0);
+            
+            int newPrev = curr;
+            
+            int newCurr = newLeading ? -1 : digit;
+            long[] sub = dfs(
+                pos + 1,
+                newPrev,
+                newCurr,
+                isLimit && (digit == up),
+                newLeading
+            );
+            long subCnt = sub[0];
+            long subSum = sub[1];
+           
+            if (!newLeading && prev >= 0 && curr >= 0) {
+                
+                if (
+                    (prev < curr && curr > digit) ||
+                    (prev > curr && curr < digit)
+                ) {
+                    sum += subCnt;
+                }
+            }
+
+            cnt += subCnt;
+            sum += subSum;
+        }
+
+        if (!isLimit && !isLeading && prev >= 0 && curr >= 0) {
+            
+            memo_cnt[pos][prev][curr] = cnt;
+            memo_sum[pos][prev][curr] = sum;
+        }
+
+        return new long[] { cnt, sum };
     }
 }

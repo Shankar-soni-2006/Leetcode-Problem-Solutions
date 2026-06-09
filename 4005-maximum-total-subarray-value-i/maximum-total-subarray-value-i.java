@@ -1,0 +1,9 @@
+class Solution {
+    public long maxTotalValue(int[] nums, int k) {
+        int max = Integer.MIN_VALUE;
+        int min = Integer.MAX_VALUE;
+        for(int i : nums)  max = Math.max(i,max);
+        for(int j : nums)  min = Math.min(j,min);
+        return (long)k*(max-min);
+    }
+}

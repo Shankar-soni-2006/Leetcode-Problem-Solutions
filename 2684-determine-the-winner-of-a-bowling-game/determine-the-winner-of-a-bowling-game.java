@@ -12,7 +12,6 @@ class Solution {
     public int isWinner(int[] player1, int[] player2) {
         int p1 = point(player1);
         int p2 = point(player2);
-        System.out.print(p1+" "+p2);
         if(p1 > p2) return 1;
         if(p1 < p2) return 2;
         else return 0;

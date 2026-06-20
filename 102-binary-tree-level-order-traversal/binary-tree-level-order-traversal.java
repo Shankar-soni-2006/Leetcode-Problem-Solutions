@@ -26,7 +26,7 @@ class Solution {
             int currsize = q.size();
             List<Integer> curr = new ArrayList<>();
             while(currsize-- > 0){
-                root = q.remove();
+                root = q.poll();
                 if(root.left!=null) q.add(root.left);
                 if(root.right!=null) q.add(root.right);
                 curr.add(root.val);

@@ -19,8 +19,7 @@ class Solution {
                 int s2 = value(s.charAt(i+1));
                 if(s1 >= s2) res+=s1;
                 else{
-                    res+=(s2-s1);
-                    i++;
+                    res-=(s1);
                 }
             }else{
                 res+=s1;

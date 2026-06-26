@@ -1,14 +1,36 @@
+class Fenwick{
+    int n;
+    int[] arr;
+    public Fenwick(int n){
+        this.n = n;
+        this.arr = new int[n+1];
+    }
+    public void update(int x, int delta){
+        for(;x <= n;x+=(x&-x)){
+            arr[x]+=delta;
+        }
+    }
+    public int query(int x){
+        int s = 0;
+        for(;x>0;x-=(x&-x)){
+            s+=arr[x];
+        }
+        return s;
+    }
+}
 class Solution {
     public int countMajoritySubarrays(int[] nums, int target) {
-        int count = 0;
         int n = nums.length;
-        for(int i = 0; i < n; i++){
-            int c = 0;
-            for(int j = i; j < n; j++){
-                if(nums[j] == target) c++;
-                if(c > (j-i+1)/2) count++;
-            }
+        Fenwick fc = new Fenwick(2*n+1);
+        long res = 0;
+        int s = n+1;
+        fc.update(s,1);
+        for(int i : nums){
+            if(i==target) s+=1;
+            else s-=1;
+            res += fc.query(s-1);
+            fc.update(s,1);
         }
-        return count;
+        return (int)res;
     }
 }

@@ -15,7 +15,7 @@ class Solution {
         }
     }
     public List<List<Integer>> permuteUnique(int[] nums) {
-        // Arrays.sort(nums);
+        Arrays.sort(nums);
         boolean[] vis = new boolean[nums.length];
         List<List<Integer>> ans = new ArrayList<>();
         List<Integer> temp = new ArrayList<>();

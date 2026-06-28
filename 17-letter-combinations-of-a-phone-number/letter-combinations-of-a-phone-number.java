@@ -4,7 +4,7 @@ class Solution {
             ans.add(curr.toString());
             return;
         }
-        String temp = arr[digits.charAt(idx)-'0'-2];
+        String temp = arr[digits.charAt(idx)-'2'];
         for(char c : temp.toCharArray()){
             curr.append(c);
             helper(idx+1,ans,digits,curr,arr);
